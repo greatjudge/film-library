@@ -18,7 +18,7 @@ func AccessControl(next http.Handler) http.Handler {
 		sess, err := session.SessionFromContext(r.Context())
 		if err != nil {
 			// internal error cause server must set session in auth middleware
-			sending.JSONError(w, ErrSomethingWrong, http.StatusInternalServerError)
+			sending.JSONError(w, ErrInternal, http.StatusInternalServerError)
 			return
 		}
 		if !sess.User.IsAdmin && MethodsAdminOnly[r.Method] {
