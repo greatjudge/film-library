@@ -25,12 +25,18 @@ type ActorHandler struct {
 	service actorService
 }
 
+func NewActorHandler(service actorService) *ActorHandler {
+	return &ActorHandler{
+		service: service,
+	}
+}
+
 func (h *ActorHandler) List(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		h.ListGet(w, r)
+		h.listGet(w, r)
 	case http.MethodPost:
-		h.ListPost(w, r)
+		h.listPost(w, r)
 	default:
 		// TODO metod not allowed
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -40,20 +46,20 @@ func (h *ActorHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *ActorHandler) Actor(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		h.Get(w, r)
+		h.get(w, r)
 	case http.MethodPut:
-		h.Put(w, r)
+		h.put(w, r)
 	case http.MethodPatch:
-		h.Patch(w, r)
+		h.patch(w, r)
 	case http.MethodDelete:
-		h.Delete(w, r)
+		h.delete(w, r)
 	default:
 		// TODO metod not allowed
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
-func (h *ActorHandler) ListGet(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) listGet(w http.ResponseWriter, r *http.Request) {
 	acts, err := h.service.GetAll()
 	if err != nil {
 		handleServiceError(w, err)
@@ -62,7 +68,7 @@ func (h *ActorHandler) ListGet(w http.ResponseWriter, r *http.Request) {
 	sending.JSONMarshalAndSend(w, acts, http.StatusOK)
 }
 
-func (h *ActorHandler) ListPost(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) listPost(w http.ResponseWriter, r *http.Request) {
 	a := entity.Actor{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -84,7 +90,7 @@ func (h *ActorHandler) ListPost(w http.ResponseWriter, r *http.Request) {
 	sending.JSONMarshalAndSend(w, a, http.StatusCreated)
 }
 
-func (h *ActorHandler) Get(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) get(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -104,7 +110,7 @@ func (h *ActorHandler) Get(w http.ResponseWriter, r *http.Request) {
 	sending.JSONMarshalAndSend(w, a, http.StatusOK)
 }
 
-func (h *ActorHandler) Put(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) put(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -138,7 +144,7 @@ func (h *ActorHandler) Put(w http.ResponseWriter, r *http.Request) {
 	sending.JSONMarshalAndSend(w, a, http.StatusOK)
 }
 
-func (h *ActorHandler) Patch(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) patch(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -172,7 +178,7 @@ func (h *ActorHandler) Patch(w http.ResponseWriter, r *http.Request) {
 	sending.JSONMarshalAndSend(w, a, http.StatusOK)
 }
 
-func (h *ActorHandler) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) delete(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {

@@ -1,9 +1,12 @@
 package main
 
 import (
+	"filmlibr/internal/handlers"
 	"filmlibr/internal/logger"
 	"filmlibr/internal/middleware"
+	service "filmlibr/internal/service/actor"
 	"filmlibr/internal/session"
+
 	"fmt"
 	"net/http"
 
@@ -28,13 +31,16 @@ func main() {
 
 	logr := logger.NewLogger(zapLogger.Sugar())
 
+	actorService := service.NewActorService()
+	actorHandler := handlers.NewActorHandler(actorService)
+
 	sessionManger := session.NewSessionManagerImpl()
 
 	// Handlers TODO:
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/actors", DummyHandler)     // Get, Post
-	mux.HandleFunc("/actor/{id}", DummyHandler) // Get, Put, Patch, Delete
+	mux.HandleFunc("/actors", actorHandler.List)      // Get, Post
+	mux.HandleFunc("/actor/{id}", actorHandler.Actor) // Get, Put, Patch, Delete
 
 	mux.HandleFunc("/films", DummyHandler)                // Get, Post
 	mux.HandleFunc("/film/{id}", DummyHandler)            // Get, Patch, Put, Delete
