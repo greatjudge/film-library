@@ -6,17 +6,23 @@ import (
 	"go.uber.org/zap"
 )
 
-type Logger struct {
+type Logger interface {
+	IncomingLog(r *http.Request)
+	Error(mes string, where string, err error)
+	LogResponse(r *http.Request, mes string, where string, status int)
+}
+
+type LoggerIml struct {
 	logger *zap.SugaredLogger
 }
 
-func NewLogger(logger *zap.SugaredLogger) *Logger {
-	return &Logger{
+func NewLogger(logger *zap.SugaredLogger) *LoggerIml {
+	return &LoggerIml{
 		logger: logger,
 	}
 }
 
-func (l Logger) IncomingLog(r *http.Request) {
+func (l LoggerIml) IncomingLog(r *http.Request) {
 	l.logger.Infof(
 		`incoming, host: %v, url: %v, method: %v`,
 		r.Host,
@@ -25,7 +31,7 @@ func (l Logger) IncomingLog(r *http.Request) {
 	)
 }
 
-func (l Logger) Error(mes string, where string, err error) {
+func (l LoggerIml) Error(mes string, where string, err error) {
 	l.logger.Errorf(
 		`message: "%v", where: "%v", err: "%w"`,
 		mes,
@@ -34,7 +40,7 @@ func (l Logger) Error(mes string, where string, err error) {
 	)
 }
 
-func (l Logger) LogResponse(r *http.Request, mes string, where string, status int) {
+func (l LoggerIml) LogResponse(r *http.Request, mes string, where string, status int) {
 	l.logger.Infof(
 		`url: %v, status-code: %d, message: "%v", where: "%v"`,
 		r.URL,
