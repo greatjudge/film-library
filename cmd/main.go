@@ -30,7 +30,7 @@ func main() {
 
 	sessionManger := session.NewSessionManagerImpl()
 
-	// Handlers
+	// Handlers TODO:
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/actors", DummyHandler)     // Get, Post

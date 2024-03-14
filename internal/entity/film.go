@@ -3,10 +3,10 @@ package entity
 import "time"
 
 type Film struct {
-	ID          int
-	Title       string
-	Description string
-	ReleaseDate time.Time
-	Rating      int
-	Actors      []Actor
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	ReleaseDate time.Time `json:"release_date"`
+	Rating      int       `json:"rating"`
+	Actors      []Actor   `json:"actors"`
 }
