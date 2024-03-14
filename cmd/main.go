@@ -39,12 +39,12 @@ func main() {
 	// Handlers TODO:
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/actors", actorHandler.List)      // Get, Post
 	mux.HandleFunc("/actor/{id}", actorHandler.Actor) // Get, Put, Patch, Delete
+	mux.HandleFunc("/actors", actorHandler.List)      // Get, Post
 
-	mux.HandleFunc("/films", DummyHandler)                // Get, Post
-	mux.HandleFunc("/film/{id}", DummyHandler)            // Get, Patch, Put, Delete
 	mux.HandleFunc("/film/{id}/{actor_id}", DummyHandler) // Post, Delete
+	mux.HandleFunc("/film/{id}", DummyHandler)            // Get, Patch, Put, Delete
+	mux.HandleFunc("/films", DummyHandler)                // Get, Post
 
 	// query -> Panic -> AccessLog -> Auth -> AccessControl -> JSONContentCheck
 	appHandler := middleware.Panic(logr, mux)

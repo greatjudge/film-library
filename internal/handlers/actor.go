@@ -10,8 +10,6 @@ import (
 	"strconv"
 )
 
-const BadIDMes = "id must be int, get %v"
-
 type actorService interface {
 	GetAll() ([]entity.ActorWithFilms, error)
 	Add(a entity.Actor) (entity.Actor, error)
@@ -59,7 +57,7 @@ func (h *ActorHandler) Actor(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *ActorHandler) listGet(w http.ResponseWriter, r *http.Request) {
+func (h *ActorHandler) listGet(w http.ResponseWriter, _ *http.Request) {
 	acts, err := h.service.GetAll()
 	if err != nil {
 		handleServiceError(w, err)
@@ -96,7 +94,7 @@ func (h *ActorHandler) get(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		sending.JSONError(
 			w,
-			fmt.Errorf(BadIDMes, idStr),
+			fmt.Errorf(badIDMes, idStr),
 			http.StatusBadRequest,
 		)
 		return
@@ -116,7 +114,7 @@ func (h *ActorHandler) put(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		sending.JSONError(
 			w,
-			fmt.Errorf(BadIDMes, idStr),
+			fmt.Errorf(badIDMes, idStr),
 			http.StatusBadRequest,
 		)
 		return
@@ -150,7 +148,7 @@ func (h *ActorHandler) patch(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		sending.JSONError(
 			w,
-			fmt.Errorf(BadIDMes, idStr),
+			fmt.Errorf(badIDMes, idStr),
 			http.StatusBadRequest,
 		)
 		return
@@ -184,7 +182,7 @@ func (h *ActorHandler) delete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		sending.JSONError(
 			w,
-			fmt.Errorf(BadIDMes, idStr),
+			fmt.Errorf(badIDMes, idStr),
 			http.StatusBadRequest,
 		)
 		return
